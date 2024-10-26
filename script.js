@@ -1,10 +1,11 @@
-import { Tetris, PLAYFIELD_ROWS, PLAYFIELD_COLUMNS } from "./tetris.js";
+import { Tetris } from "./tetris.js";
 import { convertPositionToIndex, isElementValid } from "./utils.js";
 
 const tetris = new Tetris();
 const cells = document.querySelectorAll('.cell');
 
 initKeyDown();
+
 draw();
 
 function initKeyDown() {
@@ -31,12 +32,12 @@ function rotate() {
 }
 
 function moveLeft() {
-    tetris.moveTetraminoLeftWithCheck();
+    tetris.moveTetraminoLeft();
     draw();
 }
 
 function moveRight() {
-    tetris.moveTetraminoRightWithCheck();
+    tetris.moveTetraminoRight();
     draw();
 }
 
