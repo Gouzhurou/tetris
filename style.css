@@ -1,0 +1,73 @@
+* {
+    padding: 0;
+    margin: 0;
+    /* размер определяется границами */
+    box-sizing: border-box; 
+    /* скрываем скрол */
+    overflow: hidden;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100svh;
+    background-image: linear-gradient(to top, #395492, #3dd5a8);
+    font-family: Arial, Helvetica, sans-serif;
+    /* отключаем выделения текста */
+    user-select: none;
+}
+
+.grid {
+    display: grid;
+    grid-template-rows: repeat(20, auto);
+    grid-template-columns: repeat(10, auto);
+    padding: 0.6vh;
+    /* отступ между клеточками */
+    gap: 0.3vh;
+    /* округляем углы */
+    border-radius: 0.6vh;
+    background-color: rgba(32, 0, 87, 0.5);
+}
+
+.cell {
+    --cell-size: min(4.5vh, 7.5vw);
+    height: var(--cell-size);
+    width: var(--cell-size);
+    border-radius: 0.3vh;
+    border: 0.1vh solid rgba(126, 150, 221, 0.2);
+
+}
+
+.I {
+    background-color: #cd0f0f;
+}
+
+.J {
+    background-color: #cd870f;
+}
+
+.L {
+    background-color: #cdc717;
+}
+
+.O {
+    background-color: #17c525;
+}
+
+.S {
+    background-color: #17bfc5;
+}
+
+.Z {
+    background-color: #4e17c5;
+}
+
+.T {
+    background-color: #c5177a;
+}
+
+.I, .J, .L, .O, .S, .Z, .T {
+    box-shadow: inset 2px 2px 2px rgba(255, 255, 255, 0.2),
+        inset -2px -2px 2px rgba(0, 0, 0, 0.2);
+}
