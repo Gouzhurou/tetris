@@ -1,4 +1,4 @@
-import { PLAYFIELD_COLUMNS, rotateMatrix } from "./utils.js";
+import { PLAYFIELD_COLUMNS, PLAYFIELD_ROWS, rotateMatrix } from "./utils.js";
 
 export class Tetramino {
     constructor() {
@@ -21,20 +21,34 @@ export class Tetramino {
         this.name = this.TETRAMINO_NAMES[index];
         this.matrix = this.TETRAMINOES.get(this.name);
         this.column = PLAYFIELD_COLUMNS / 2 - Math.floor(this.matrix.length / 2);
-        // this.row = -2;
-        this.row = 3;
+        this.row = -2;
     }
 
     moveTetraminoLeft() {
-        if (this.column + this._leftOffset() > 0) {
+        const isValid = this.column + this._leftOffset() > 0;
+        if (isValid) {
             this._moveTetraminoLeft();
         }
+
+        return isValid;
     }
 
     moveTetraminoRight() {
-        if (this.column < PLAYFIELD_COLUMNS - this._rightOffset()) {
+        const isValid = this.column < PLAYFIELD_COLUMNS - this._rightOffset();
+        if (isValid) {
             this._moveTetraminoRight();
         }
+
+        return isValid;
+    }
+
+    moveTetraminoDown() {
+        const isValid = this.row < PLAYFIELD_ROWS - this._downOffset();
+        if (isValid) {
+            this.row++;
+        }
+        
+        return isValid;
     }
 
     rotateTetramino() {
@@ -47,6 +61,14 @@ export class Tetramino {
         while (this.column > PLAYFIELD_COLUMNS - this._rightOffset()) {
             this._moveTetraminoLeft();
         }
+
+        while (this.row > PLAYFIELD_ROWS - this._downOffset()) {
+            this._moveTetraminoUp();
+        }
+    }
+
+    _moveTetraminoUp() {
+        this.row--;
     }
 
     _moveTetraminoLeft() {
@@ -55,6 +77,21 @@ export class Tetramino {
 
     _moveTetraminoRight() {
         this.column++;
+    }
+
+    _downOffset() {
+        const size = this.matrix.length;
+        let minOffset = size;
+
+        for (let j = 0; j < size; j++) {
+            let index = size - 1;
+            while (index > 0 && this.matrix[index][j] == 0) {
+                index--;
+            }
+            minOffset = size - index - 1 < minOffset ? size - index - 1 : minOffset;
+        }
+
+        return size - minOffset;
     }
 
     _leftOffset() {

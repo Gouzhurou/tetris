@@ -1,15 +1,12 @@
 export const PLAYFIELD_ROWS = 20;
 export const PLAYFIELD_COLUMNS = 10;
 
-export function convertPositionToIndex(row, col) {
-    return row * PLAYFIELD_COLUMNS + col;
+export function convertPositionToIndex(row, column) {
+    return row * PLAYFIELD_COLUMNS + column;
 }
 
 export function isElementValid(tetramino, rowOffset, colOffset) {
-    return tetramino.matrix[rowOffset][colOffset] == 1 && 
-        tetramino.row + rowOffset >= 0 && 
-        tetramino.column + colOffset >= 0 &&
-        tetramino.column + colOffset < PLAYFIELD_COLUMNS;
+    return tetramino.matrix[rowOffset][colOffset] == 1 && tetramino.row + rowOffset >= 0;
 }
 
 export function rotateMatrix(matrix) {

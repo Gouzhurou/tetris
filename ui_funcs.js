@@ -1,4 +1,4 @@
-import { convertPositionToIndex, isElementValid } from "./utils.js";
+import { convertPositionToIndex, isElementValid, PLAYFIELD_COLUMNS, PLAYFIELD_ROWS } from "./utils.js";
 import { Tetris } from "./tetris.js";
 
 const tetris = new Tetris();
@@ -19,6 +19,9 @@ function onKeyDown(event) {
         case 'ArrowUp':
             rotate();
             break;
+        case 'ArrowDown':
+            moveDown();
+            break;
     }
 }
 
@@ -37,12 +40,29 @@ function moveRight() {
     draw();
 }
 
+function moveDown() {
+    tetris.moveTetraminoDown();
+    draw();
+}
+
 export function draw() {
     cells.forEach(cell => {
         cell.removeAttribute('class');
         cell.classList.add("cell");
     });
+    drawPlayfield();
     drawTetramino();
+}
+
+function drawPlayfield() {
+    const playfield = tetris.playField;
+    for (let row = 0; row < PLAYFIELD_ROWS; row++) {
+        for (let col = 0; col < PLAYFIELD_COLUMNS; col++) {
+            if (playfield[row][col] == null) continue;
+            const cellIndex = convertPositionToIndex(row, col);
+            cells[cellIndex].classList.add(playfield[row][col]);
+        }
+    }
 }
 
 function drawTetramino() {
