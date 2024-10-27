@@ -90,7 +90,7 @@ export function moveDown() {
 function gameOver() {
     document.removeEventListener("keydown", onKeyDown);
     writeScoreToTable();
-    window.location.href = 'recordTable.html';
+    window.location.href = '../html/recordTable.html';
 }
 
 function writeScoreToTable() {
