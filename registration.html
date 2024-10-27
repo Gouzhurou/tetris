@@ -28,6 +28,12 @@
             // Переходим на другую страницу
             window.location.href = 'game.html'; // Укажите нужный вам файл
         });
+
+        const lastUser = localStorage.getItem("nickname");
+        if (lastUser) {
+            var nickname = document.getElementById('nickname');
+            nickname.value = lastUser;
+        }
     </script>
 </body>
 </html>

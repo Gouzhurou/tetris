@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Таблица рекордов</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="records-container">
+        <h1 class="records-title">Таблица рекордов:</h1>
+        <p class="record"></p>
+        <p class="record"></p>
+        <p class="record"></p>
+        <p class="record"></p>
+        <p class="record"></p>
+        <p class="record"></p>
+        <p class="record"></p>
+        <p class="record"></p>
+        <p class="record"></p>
+        <p class="record"></p>
+        <button class="restart-button" onclick="window.location.href = 'game.html'">Сыграть снова</button>
+        <button class="registration-button" onclick="window.location.href = 'registration.html'">Войти под другим именем</button>
+    </div>
+
+    <script>
+        const records = document.querySelectorAll('.record');
+        const recordTable = JSON.parse(localStorage.getItem("recordTable"));
+        const size = recordTable ? recordTable.length : 0;
+        const recordTableSize = size < 10 ? size : 10;
+        
+        for (let i = 0; i < recordTableSize; i++) {
+            const record = recordTable[i];
+            records[i].textContent = (i + 1) + ". " + record.nickname + " " + record.score;
+        }
+
+        for (let i = recordTableSize; i < 10; i++) {
+            records[i].textContent = (i + 1) + ". ...";
+        }
+    </script>
+</body>
+</html>

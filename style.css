@@ -31,6 +31,7 @@ body {
     display: block; /* Лейбл занимает всю ширину */
     margin-bottom: 10px; /* Отступ снизу от лейбла */
     font-weight: bold; /* Жирный шрифт для лейбла */
+    font-size: 20px;
 }
 
 .username-input {
@@ -39,9 +40,10 @@ body {
     margin-bottom: 15px; /* Отступ снизу от поля ввода */
     border: 1px solid #ccc; /* Светлая рамка */
     border-radius: 4px; /* Закругленные углы для поля ввода */
+    font-size: 20px;
 }
 
-.start-button {
+.start-button, .restart-button, .registration-button {
     background-color: #007bff; /* Синий фон кнопки */
     color: white; /* Белый цвет текста */
     border: none; /* Без рамки */
@@ -49,20 +51,25 @@ body {
     padding: 10px; /* Внутренние отступы */
     cursor: pointer; /* Курсор по форме руки */
     transition: background-color 0.3s; /* Плавный переход цвета фона */
+    font-size: 20px;
 }
 
-.start-button:hover {
+.restart-button, .registration-button {
+    margin-top: 20px;
+}
+
+.start-button:hover, .restart-button:hover, .registration-button:hover {
     background-color: #0056b3; /* Темно-синий цвет при наведении */
 }
 
-.game-info {
+.game-info, .records-container {
     padding: 20px;
     border: 0.3vh solid rgba(32, 0, 87, 0.5);
     border-radius: 0.6vh;
     font-size: 20px;
 }
 
-.player-nickname {
+.player-nickname, .records-title {
     margin-bottom: 10px;
 }
 
@@ -77,6 +84,10 @@ body {
 .rules-title {
     margin-top: 30px;
     margin-bottom: 10px;
+}
+
+.record {
+    margin: 5px;
 }
 
 .grid, .tetramino {

@@ -90,6 +90,7 @@ export function moveDown() {
 function gameOver() {
     document.removeEventListener("keydown", onKeyDown);
     writeScoreToTable();
+    window.location.href = 'recordTable.html';
 }
 
 function writeScoreToTable() {
@@ -133,6 +134,11 @@ function stopLoop() {
     clearTimeout(timeoutId);
 }
 
+function setLevel() {
+    const playerLevel = document.querySelector(".level");
+    playerLevel.textContent = "Уровень: " + tetris.level;
+}
+
 export function draw() {
     cells.forEach(cell => {
         cell.removeAttribute('class');
@@ -161,11 +167,6 @@ function drawNextTetramino() {
             }
         }
     }
-}
-
-function setLevel() {
-    const playerLevel = document.querySelector(".level");
-    playerLevel.textContent = "Уровень: " + tetris.level;
 }
 
 function drawPlayfield() {
