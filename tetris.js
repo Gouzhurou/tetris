@@ -9,14 +9,17 @@ export class Tetris {
     constructor() {
         this.playField = defaultMatrix(PLAYFIELD_ROWS, PLAYFIELD_COLUMNS, null);
         this.tetramino = new Tetramino();
+        this.nextTetramino = new Tetramino();
         this.ghostTetramino;
         this._createGhostTetramino();
         this.isGameOver = false;
         this.score = 0;
+        this.level = 1;
     }
 
     generateTetramino() {
-        this.tetramino.generateTetramino();
+        this.tetramino = this.nextTetramino.copy();
+        this.nextTetramino.generateTetramino();
         this._createGhostTetramino();
     }
 
@@ -121,6 +124,8 @@ export class Tetris {
             addScore = addScore * SCORE_MULT_COEF + SCORE_ADD_COEF;
         } 
         this.score += addScore;
+
+        this.level = this.score < SCORE_PER_LEVEL ? this.level : Math.ceil(this.score / SCORE_PER_LEVEL);
     }
 
     _isRowFilled(index) {

@@ -9,7 +9,7 @@
 
 body {
     display: flex;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
     height: 100svh;
     background-image: linear-gradient(to top, #395492, #3dd5a8);
@@ -18,10 +18,69 @@ body {
     user-select: none;
 }
 
-.grid {
+.form-container {
+    background-color: #ffffff; /* Белый фон для формы */
+    padding: 20px; /* Внутренние отступы */
+    border-radius: 8px; /* Закругленные углы */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Тень */
+    width: 300px; /* Ширина формы */
+    text-align: center; /* Центрируем текст внутри формы */
+}
+
+.username-label {
+    display: block; /* Лейбл занимает всю ширину */
+    margin-bottom: 10px; /* Отступ снизу от лейбла */
+    font-weight: bold; /* Жирный шрифт для лейбла */
+}
+
+.username-input {
+    width: 100%; /* Полное применение ширины */
+    padding: 10px; /* Внутренние отступы */
+    margin-bottom: 15px; /* Отступ снизу от поля ввода */
+    border: 1px solid #ccc; /* Светлая рамка */
+    border-radius: 4px; /* Закругленные углы для поля ввода */
+}
+
+.start-button {
+    background-color: #007bff; /* Синий фон кнопки */
+    color: white; /* Белый цвет текста */
+    border: none; /* Без рамки */
+    border-radius: 4px; /* Закругленные углы для кнопки */
+    padding: 10px; /* Внутренние отступы */
+    cursor: pointer; /* Курсор по форме руки */
+    transition: background-color 0.3s; /* Плавный переход цвета фона */
+}
+
+.start-button:hover {
+    background-color: #0056b3; /* Темно-синий цвет при наведении */
+}
+
+.game-info {
+    padding: 20px;
+    border: 0.3vh solid rgba(32, 0, 87, 0.5);
+    border-radius: 0.6vh;
+    font-size: 20px;
+}
+
+.player-nickname {
+    margin-bottom: 10px;
+}
+
+.level {
+    margin-bottom: 30px;
+}
+
+.next-tetramino {
+    margin-bottom: 10px;
+}
+
+.rules-title {
+    margin-top: 30px;
+    margin-bottom: 10px;
+}
+
+.grid, .tetramino {
     display: grid;
-    grid-template-rows: repeat(20, auto);
-    grid-template-columns: repeat(10, auto);
     padding: 0.6vh;
     /* отступ между клеточками */
     gap: 0.3vh;
@@ -30,13 +89,23 @@ body {
     background-color: rgba(32, 0, 87, 0.5);
 }
 
-.cell {
+.grid {
+    grid-template-rows: repeat(20, auto);
+    grid-template-columns: repeat(10, auto);
+}
+
+.tetramino {
+    width: fit-content;
+    grid-template-rows: repeat(4, auto);
+    grid-template-columns: repeat(4, auto);
+}
+
+.cell, .tetramino-cell {
     --cell-size: min(4.5vh, 7.5vw);
     height: var(--cell-size);
     width: var(--cell-size);
     border-radius: 0.3vh;
     border: 0.1vh solid rgba(126, 150, 221, 0.2);
-
 }
 
 .ghost {

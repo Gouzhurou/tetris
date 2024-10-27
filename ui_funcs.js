@@ -1,5 +1,5 @@
-import { convertPositionToIndex, isElementValid, PLAYFIELD_COLUMNS, PLAYFIELD_ROWS } from "./utils.js";
-import { Tetris, SCORE_PER_LEVEL } from "./tetris.js";
+import { convertPositionToIndex, isElementValid, PLAYFIELD_COLUMNS, PLAYFIELD_ROWS, getNickname, TETRAMINO_FIELD_SIZE } from "./utils.js";
+import { Tetris } from "./tetris.js";
 
 const GHOST_CLASS = "ghost";
 const START_SPEED = 500;
@@ -11,6 +11,10 @@ let requestId;
 let timeoutId;
 const tetris = new Tetris();
 const cells = document.querySelectorAll('.cell');
+const tetraminoCells = document.querySelectorAll('.tetramino-cell');
+
+const playerNickname = document.querySelector(".player-nickname");
+playerNickname.textContent += getNickname();
 
 export function initKeyDown() {
     document.addEventListener('keydown', onKeyDown);
@@ -70,12 +74,12 @@ export function moveDown() {
 }
 
 function gameOver() {
-    alert("congratulations! you lose!");
+    const nickname = getNickname();
+    alert("congratulations, " + nickname + "! you lose!");
 }
 
 function startLoop() {
-    const level = Math.floor(tetris.score / SCORE_PER_LEVEL);
-    const timeout = level < (MAX_LEVEL - 1) ? START_SPEED - SPEED_DIFF * level : MAX_SPEED;
+    const timeout = tetris.level < MAX_LEVEL ? START_SPEED - SPEED_DIFF * (tetris.level - 1) : MAX_SPEED;
     timeoutId = setTimeout(() => requestId = requestAnimationFrame(moveDown), timeout);
 }
 
@@ -89,9 +93,34 @@ export function draw() {
         cell.removeAttribute('class');
         cell.classList.add("cell");
     });
+
+    tetraminoCells.forEach(cell => {
+        cell.removeAttribute('class');
+        cell.classList.add("tetramino-cell");
+    });
+
+    setLevel();
     drawPlayfield();
+    drawNextTetramino();
     drawTetramino(tetris.tetramino, tetris.tetramino.name);
     drawTetramino(tetris.ghostTetramino, GHOST_CLASS);
+}
+
+function drawNextTetramino() {
+    const tetramino = tetris.nextTetramino;
+    const matrixSize = tetramino.matrix.length;
+    for (let row = 0; row < matrixSize; row++) {
+        for (let col = 0; col < matrixSize; col++) {
+            if (tetramino.matrix[row][col] == 1) {
+                tetraminoCells[row * TETRAMINO_FIELD_SIZE + col].classList.add(tetramino.name);
+            }
+        }
+    }
+}
+
+function setLevel() {
+    const playerLevel = document.querySelector(".level");
+    playerLevel.textContent = "Уровень: " + tetris.level;
 }
 
 function drawPlayfield() {

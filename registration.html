@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="utf-8">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+    <div class="form-container">
+        <form id="userForm">
+            <label class="username-label" for="nickname">Введите свой никнейм:</label>
+            <input class="username-input" type="text" id="nickname" required placeholder="PapkaNagibator">
+            <button class="start-button" type="submit">Начать играть</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('userForm').addEventListener('submit', function(event) {
+            // Предотвращаем отправку формы
+            event.preventDefault();
+
+            // Получаем значение никнейма
+            var nickname = document.getElementById('nickname').value;
+
+            // Сохраняем никнейм в локальное хранилище
+            localStorage.setItem('nickname', nickname);
+
+            // Переходим на другую страницу
+            window.location.href = 'game.html'; // Укажите нужный вам файл
+        });
+    </script>
+</body>
+</html>

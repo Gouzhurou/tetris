@@ -1,5 +1,6 @@
 export const PLAYFIELD_ROWS = 20;
 export const PLAYFIELD_COLUMNS = 10;
+export const TETRAMINO_FIELD_SIZE = 4;
 
 export function convertPositionToIndex(row, column) {
     return row * PLAYFIELD_COLUMNS + column;
@@ -42,3 +43,7 @@ export function copyMatrix(matrix) {
 export function defaultMatrix(rowCount, columnCount, defaultValue) {
     return new Array(rowCount).fill().map(() => new Array(columnCount).fill(defaultValue));
 }
+
+export function getNickname() {
+    return localStorage["nickname"];
+} 
