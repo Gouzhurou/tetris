@@ -1,7 +1,11 @@
 import { convertPositionToIndex, isElementValid, PLAYFIELD_COLUMNS, PLAYFIELD_ROWS } from "./utils.js";
-import { Tetris } from "./tetris.js";
+import { Tetris, SCORE_PER_LEVEL } from "./tetris.js";
 
 const GHOST_CLASS = "ghost";
+const START_SPEED = 500;
+const SPEED_DIFF = 100;
+const MAX_SPEED = 50;
+const MAX_LEVEL = 6;
 
 let requestId;
 let timeoutId;
@@ -70,7 +74,9 @@ function gameOver() {
 }
 
 function startLoop() {
-    timeoutId = setTimeout(() => requestId = requestAnimationFrame(moveDown), 400);
+    const level = Math.floor(tetris.score / SCORE_PER_LEVEL);
+    const timeout = level < (MAX_LEVEL - 1) ? START_SPEED - SPEED_DIFF * level : MAX_SPEED;
+    timeoutId = setTimeout(() => requestId = requestAnimationFrame(moveDown), timeout);
 }
 
 function stopLoop() {

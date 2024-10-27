@@ -1,6 +1,10 @@
 import { PLAYFIELD_COLUMNS, PLAYFIELD_ROWS, isElementValid, defaultMatrix, isElementOutside } from "./utils.js";
 import { Tetramino } from "./tetramino.js"
 
+const SCORE_MULT_COEF = 2
+const SCORE_ADD_COEF = 10
+export const SCORE_PER_LEVEL = 50
+
 export class Tetris {
     constructor() {
         this.playField = defaultMatrix(PLAYFIELD_ROWS, PLAYFIELD_COLUMNS, null);
@@ -8,6 +12,7 @@ export class Tetris {
         this.ghostTetramino;
         this._createGhostTetramino();
         this.isGameOver = false;
+        this.score = 0;
     }
 
     generateTetramino() {
@@ -107,6 +112,15 @@ export class Tetris {
                 this._dropRowBy(i, filledRowsCount);
             }
         }
+        this._updateScore(filledRowsCount);
+    }
+
+    _updateScore(filledRowsCount) {
+        let addScore = 0;
+        for (let i = 0; i < filledRowsCount; i++) {
+            addScore = addScore * SCORE_MULT_COEF + SCORE_ADD_COEF;
+        } 
+        this.score += addScore;
     }
 
     _isRowFilled(index) {
