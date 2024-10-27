@@ -1,10 +1,24 @@
-import { Tetramino } from "./tetramino.js";
-import { PLAYFIELD_COLUMNS, PLAYFIELD_ROWS, isElementValid, defaultMatrix } from "./utils.js";
+import { PLAYFIELD_COLUMNS, PLAYFIELD_ROWS, isElementValid, defaultMatrix, isElementOutside } from "./utils.js";
+import { Tetramino } from "./tetramino.js"
 
 export class Tetris {
     constructor() {
         this.playField = defaultMatrix(PLAYFIELD_ROWS, PLAYFIELD_COLUMNS, null);
         this.tetramino = new Tetramino();
+        this.ghostTetramino;
+        this._createGhostTetramino();
+        this.isGameOver = false;
+    }
+
+    generateTetramino() {
+        this.tetramino.generateTetramino();
+        this._createGhostTetramino();
+    }
+
+    dropTetramino() {
+        this.tetramino.row = this.ghostTetramino.row;
+        this.tetramino.column = this.ghostTetramino.column;
+        this.moveTetraminoDown();
     }
 
     moveTetraminoDown() {
@@ -17,7 +31,7 @@ export class Tetris {
 
         if (isBottom || isIntersect) {
             this._placeTetramino();
-            this.tetramino.generateTetramino();
+            this.generateTetramino();
         }
     }
 
@@ -26,6 +40,8 @@ export class Tetris {
         if (this._isIntersect(this.tetramino)) {
             this.tetramino.moveTetraminoRight();
         }
+
+        this._createGhostTetramino();
     }
 
     moveTetraminoRight() {
@@ -33,6 +49,8 @@ export class Tetris {
         if (this._isIntersect(this.tetramino)) {
             this.tetramino.moveTetraminoLeft();
         }
+
+        this._createGhostTetramino();
     }
 
     rotateTetramino() {
@@ -41,6 +59,22 @@ export class Tetris {
         if (!this._isIntersect(tmp)) {
             this.tetramino.rotateTetramino();
         }
+
+        this._createGhostTetramino();
+    }
+
+    _createGhostTetramino() {
+        const tmp = this.tetramino.copy();
+
+        let isBottom = !tmp.moveTetraminoDown();
+        while (!this._isIntersect(tmp) && !isBottom) {
+            isBottom = !tmp.moveTetraminoDown();
+        }
+        
+        if (!isBottom) {
+            tmp._moveTetraminoUp();
+        }
+        this.ghostTetramino = tmp;
     }
 
     _placeTetramino() {
@@ -50,6 +84,9 @@ export class Tetris {
             for (let col = 0; col < matrixSize; col++) {
                 if (isElementValid(this.tetramino, row, col)) {
                     this.playField[this.tetramino.row + row][this.tetramino.column + col] = name;
+                } else if (isElementOutside(this.tetramino, row, col)) {
+                    this.isGameOver = true;
+                    return;
                 }
             }
         }
@@ -73,7 +110,6 @@ export class Tetris {
     }
 
     _isRowFilled(index) {
-        console.table(this.playField[index].every(cell => cell != null));
         return this.playField[index].every(cell => cell != null);
     }
 

@@ -39,6 +39,10 @@ body {
 
 }
 
+.ghost {
+    background-color: rgba(40, 38, 38, 0.2);
+}
+
 .I {
     background-color: #cd0f0f;
 }
@@ -67,7 +71,7 @@ body {
     background-color: #c5177a;
 }
 
-.I, .J, .L, .O, .S, .Z, .T {
+.I, .J, .L, .O, .S, .Z, .T, .ghost {
     box-shadow: inset 2px 2px 2px rgba(255, 255, 255, 0.2),
         inset -2px -2px 2px rgba(0, 0, 0, 0.2);
 }

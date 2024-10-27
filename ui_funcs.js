@@ -1,6 +1,10 @@
 import { convertPositionToIndex, isElementValid, PLAYFIELD_COLUMNS, PLAYFIELD_ROWS } from "./utils.js";
 import { Tetris } from "./tetris.js";
 
+const GHOST_CLASS = "ghost";
+
+let requestId;
+let timeoutId;
 const tetris = new Tetris();
 const cells = document.querySelectorAll('.cell');
 
@@ -20,9 +24,20 @@ function onKeyDown(event) {
             rotate();
             break;
         case 'ArrowDown':
-            moveDown();
+            dropDown();
             break;
     }
+}
+
+function dropDown() {
+    tetris.dropTetramino();
+    draw();
+    stopLoop();
+    if (tetris.isGameOver) {
+        gameOver();
+        return;
+    }
+    startLoop();
 }
 
 function rotate() {
@@ -40,9 +55,27 @@ function moveRight() {
     draw();
 }
 
-function moveDown() {
+export function moveDown() {
     tetris.moveTetraminoDown();
     draw();
+    if (tetris.isGameOver) {
+        gameOver();
+        return;
+    }
+    startLoop();
+}
+
+function gameOver() {
+    alert("congratulations! you lose!");
+}
+
+function startLoop() {
+    timeoutId = setTimeout(() => requestId = requestAnimationFrame(moveDown), 400);
+}
+
+function stopLoop() {
+    cancelAnimationFrame(requestId);
+    clearTimeout(timeoutId);
 }
 
 export function draw() {
@@ -51,7 +84,8 @@ export function draw() {
         cell.classList.add("cell");
     });
     drawPlayfield();
-    drawTetramino();
+    drawTetramino(tetris.tetramino, tetris.tetramino.name);
+    drawTetramino(tetris.ghostTetramino, GHOST_CLASS);
 }
 
 function drawPlayfield() {
@@ -65,15 +99,13 @@ function drawPlayfield() {
     }
 }
 
-function drawTetramino() {
-    const tetramino = tetris.tetramino;
-    const name = tetramino.name;
+function drawTetramino(tetramino, className) {
     const matrixSize = tetramino.matrix.length;
     for (let row = 0; row < matrixSize; row++) {
         for (let col = 0; col < matrixSize; col++) {
             if (isElementValid(tetramino, row, col)) {
                 const cellIndex = convertPositionToIndex(tetramino.row + row, tetramino.column + col);
-                cells[cellIndex].classList.add(name);
+                cells[cellIndex].classList.add(className);
             }
         }
     }

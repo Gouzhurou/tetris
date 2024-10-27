@@ -9,6 +9,10 @@ export function isElementValid(tetramino, rowOffset, colOffset) {
     return tetramino.matrix[rowOffset][colOffset] == 1 && tetramino.row + rowOffset >= 0;
 }
 
+export function isElementOutside(tetramino, rowOffset, colOffset) {
+    return tetramino.matrix[rowOffset][colOffset] == 1 && tetramino.row + rowOffset < 0;
+}
+
 export function rotateMatrix(matrix) {
     const size = matrix.length;
     const newMatrix = defaultMatrix(size, size, 0);
