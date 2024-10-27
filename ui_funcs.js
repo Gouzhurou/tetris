@@ -6,10 +6,12 @@ const START_SPEED = 500;
 const SPEED_DIFF = 100;
 const MAX_SPEED = 50;
 const MAX_LEVEL = 6;
+const RECORD_TABLE_NAME = "recordTable";
 
 let requestId;
 let timeoutId;
 const tetris = new Tetris();
+let inRecordTable = false;
 const cells = document.querySelectorAll('.cell');
 const tetraminoCells = document.querySelectorAll('.tetramino-cell');
 
@@ -41,10 +43,16 @@ function dropDown() {
     tetris.dropTetramino();
     draw();
     stopLoop();
-    if (tetris.isGameOver) {
+    if (tetris.isGameOver && !inRecordTable) {
+        inRecordTable = true;
         gameOver();
         return;
     }
+
+    if (tetris.isGameOver) {
+        return;
+    }
+
     startLoop();
 }
 
@@ -66,16 +74,53 @@ function moveRight() {
 export function moveDown() {
     tetris.moveTetraminoDown();
     draw();
-    if (tetris.isGameOver) {
+    if (tetris.isGameOver && !inRecordTable) {
+        inRecordTable = true;
         gameOver();
         return;
     }
+
+    if (tetris.isGameOver) {
+        return;
+    }
+
     startLoop();
 }
 
 function gameOver() {
+    document.removeEventListener("keydown", onKeyDown);
+    writeScoreToTable();
+}
+
+function writeScoreToTable() {
     const nickname = getNickname();
-    alert("congratulations, " + nickname + "! you lose!");
+    const score = tetris.score;
+    const user = {
+        nickname: nickname,
+        score: score,
+    };
+
+    let recordTable = localStorage.getItem(RECORD_TABLE_NAME);
+    if (!recordTable) {
+        recordTable = new Array();
+        recordTable.push(user);
+    } else {
+        recordTable = JSON.parse(recordTable);
+        let isPushed = false; 
+        for (let i = 0; i < recordTable.length; i++) {
+            if (recordTable[i].score <= score) {
+                recordTable.splice(i, 0, user);
+                isPushed = true;
+                break;
+            }
+        }
+
+        if (!isPushed) {
+            recordTable.push(user);
+        }
+    }
+
+    localStorage.setItem(RECORD_TABLE_NAME, JSON.stringify(recordTable));
 }
 
 function startLoop() {
