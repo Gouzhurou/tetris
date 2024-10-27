@@ -1,20 +1,15 @@
 import { Tetramino } from "./tetramino.js";
-import { PLAYFIELD_COLUMNS, PLAYFIELD_ROWS, isElementValid } from "./utils.js";
+import { PLAYFIELD_COLUMNS, PLAYFIELD_ROWS, isElementValid, defaultMatrix } from "./utils.js";
 
 export class Tetris {
     constructor() {
-        this.playField = this.generatePlayField();
+        this.playField = defaultMatrix(PLAYFIELD_ROWS, PLAYFIELD_COLUMNS, null);
         this.tetramino = new Tetramino();
-    }
-
-    generatePlayField() {
-        return new Array(PLAYFIELD_ROWS).fill()
-            .map(() => new Array(PLAYFIELD_COLUMNS).fill(null));
     }
 
     moveTetraminoDown() {
         const isBottom = !this.tetramino.moveTetraminoDown();
-        const isIntersect = this._isIntersect();
+        const isIntersect = this._isIntersect(this.tetramino);
 
         if (isIntersect) {
             this.tetramino._moveTetraminoUp();
@@ -28,14 +23,24 @@ export class Tetris {
 
     moveTetraminoLeft() {
         this.tetramino.moveTetraminoLeft();
+        if (this._isIntersect(this.tetramino)) {
+            this.tetramino.moveTetraminoRight();
+        }
     }
 
     moveTetraminoRight() {
         this.tetramino.moveTetraminoRight();
+        if (this._isIntersect(this.tetramino)) {
+            this.tetramino.moveTetraminoLeft();
+        }
     }
 
     rotateTetramino() {
-        this.tetramino.rotateTetramino();
+        const tmp = this.tetramino.copy();
+        tmp.rotateTetramino();
+        if (!this._isIntersect(tmp)) {
+            this.tetramino.rotateTetramino();
+        }
     }
 
     _placeTetramino() {
@@ -48,17 +53,51 @@ export class Tetris {
                 }
             }
         }
+
+        this._clearFilledRows();
     }
 
-    _isIntersect() {
-        const size = this.tetramino.matrix.length;
-        const startRow = this.tetramino.row;
-        const startColumn = this.tetramino.column;
+    _clearFilledRows() {
+        let filledRowsCount = 0;
+
+        for (let i = PLAYFIELD_ROWS - 1; i >= 0; --i) {
+            if (this._isRowFilled(i)) {
+                filledRowsCount++;
+                this._clearFilledRow(i);
+                continue;
+            }
+            if (filledRowsCount > 0) {
+                this._dropRowBy(i, filledRowsCount);
+            }
+        }
+    }
+
+    _isRowFilled(index) {
+        console.table(this.playField[index].every(cell => cell != null));
+        return this.playField[index].every(cell => cell != null);
+    }
+
+    _clearFilledRow(index) {
+        this.playField[index].fill(null);
+    }
+
+    _dropRowBy(index, rowCount) {
+        const newIndex = index + rowCount;
+        for (let j = 0; j < PLAYFIELD_COLUMNS; ++j) {
+            this.playField[newIndex][j] = this.playField[index][j];
+        }
+        this._clearFilledRow(index);
+    }
+
+    _isIntersect(tetramino) {
+        const size = tetramino.matrix.length;
+        const startRow = tetramino.row;
+        const startColumn = tetramino.column;
 
         for (let row = 0; row < size; row++) {
             for (let col = 0; col < size; col++) {
                 if (
-                    isElementValid(this.tetramino, row, col) &&
+                    isElementValid(tetramino, row, col) &&
                     this.playField[startRow + row][startColumn + col] != null
                 ) {
                     return true;

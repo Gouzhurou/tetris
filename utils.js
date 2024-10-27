@@ -11,8 +11,7 @@ export function isElementValid(tetramino, rowOffset, colOffset) {
 
 export function rotateMatrix(matrix) {
     const size = matrix.length;
-    const newMatrix = new Array(size).fill()
-        .map(() => new Array(size).fill(0));
+    const newMatrix = defaultMatrix(size, size, 0);
 
     for (let i = 0; i < size; ++i) {
         for (let j = 0; j < size; ++j) {
@@ -21,4 +20,21 @@ export function rotateMatrix(matrix) {
     }
 
     return newMatrix;
+}
+
+export function copyMatrix(matrix) {
+    const size = matrix.length;
+    const newMatrix = defaultMatrix(size, size, 0);
+
+    for (let i = 0; i < size; ++i) {
+        for (let j = 0; j < size; ++j) {
+            newMatrix[i][j] = matrix[i][j];
+        }
+    }
+
+    return newMatrix;
+}
+
+export function defaultMatrix(rowCount, columnCount, defaultValue) {
+    return new Array(rowCount).fill().map(() => new Array(columnCount).fill(defaultValue));
 }

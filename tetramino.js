@@ -1,4 +1,6 @@
-import { PLAYFIELD_COLUMNS, PLAYFIELD_ROWS, rotateMatrix } from "./utils.js";
+import { PLAYFIELD_COLUMNS, PLAYFIELD_ROWS, rotateMatrix, copyMatrix } from "./utils.js";
+
+const TETRAMINO_POSITION_COUNT = 4;
 
 export class Tetramino {
     constructor() {
@@ -15,13 +17,29 @@ export class Tetramino {
         this.generateTetramino();
     }
 
+    copy() {
+        const tetramino = new Tetramino();
+        tetramino.name = this.name;
+        tetramino.row = this.row;
+        tetramino.column = this.column;
+        tetramino.matrix = copyMatrix(this.matrix);
+        
+        return tetramino;
+    }
+
     generateTetramino() {
         const index = Math.floor(Math.random() * this.TETRAMINO_NAMES.length);
 
         this.name = this.TETRAMINO_NAMES[index];
         this.matrix = this.TETRAMINOES.get(this.name);
+
+        const rotateCount = Math.floor(Math.random() * TETRAMINO_POSITION_COUNT);
+        for (let i = 0; i <= rotateCount; i++) {
+            this.rotateTetramino();
+        }
+
         this.column = PLAYFIELD_COLUMNS / 2 - Math.floor(this.matrix.length / 2);
-        this.row = -2;
+        this.row = -this.matrix.length;
     }
 
     moveTetraminoLeft() {
@@ -126,10 +144,10 @@ export class Tetramino {
     _createTetraminoes() {
         return new Map([
             ['I', [
-                [0, 0, 0, 0],
-                [1, 1, 1, 1],
-                [0, 0, 0, 0],
-                [0, 0, 0, 0],
+                [0, 0, 1, 0],
+                [0, 0, 1, 0],
+                [0, 0, 1, 0],
+                [0, 0, 1, 0],
             ]],
             ['J', [
                 [1, 0, 0],
